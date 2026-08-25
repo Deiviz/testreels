@@ -3,12 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content="description" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content="Astro v4.15.4" />
 
     <title>Drama Miau PT - Videos</title>
     <link rel="stylesheet" href="./style/style.css" />
+    <link rel="stylesheet" href="./style/reels-viewport.css" />
   </head>
   <body class="overflow-hidden h-full">
     <header class="flex justify-between items-center bg-surface-body py-2 px-4" id="site-header" style="position: absolute; top: 0; left: 0; z-index: 100; width: 100%">
@@ -336,26 +337,41 @@
 
 <script>
   (function () {
-    if (!/iPhone|iPod/.test(navigator.userAgent)) return;
+    const root = document.documentElement;
+    const supportsDynamicViewport = CSS.supports && CSS.supports("height", "100dvh");
 
-    document.documentElement.classList.add("is-iphone");
-
-    function updateIphoneSafariOffset() {
-      let safariBottom = 0;
-      const vv = window.visualViewport;
-      if (vv) {
-        safariBottom = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
-      }
-      document.documentElement.style.setProperty("--iphone-safari-bottom", safariBottom + 8 + "px");
+    if (/iPhone|iPod/.test(navigator.userAgent)) {
+      root.classList.add("is-iphone");
     }
 
-    updateIphoneSafariOffset();
-    window.addEventListener("resize", updateIphoneSafariOffset);
-    window.addEventListener("orientationchange", updateIphoneSafariOffset);
-    window.addEventListener("load", updateIphoneSafariOffset);
+    function updateReelsViewport() {
+      const viewportHeight = window.visualViewport?.height || window.innerHeight;
+      const stickyNav = document.querySelector(".mss-StickyNav");
+
+      // Fallback para navegadores antiguos que todavía no soportan dvh.
+      if (!supportsDynamicViewport) {
+        root.style.setProperty("--reels-viewport-height", Math.round(viewportHeight) + "px");
+      }
+
+      if (stickyNav) {
+        root.style.setProperty("--reels-sticky-nav-height", Math.ceil(stickyNav.getBoundingClientRect().height) + "px");
+      }
+    }
+
+    updateReelsViewport();
+    window.addEventListener("resize", updateReelsViewport);
+    window.addEventListener("orientationchange", updateReelsViewport);
+    window.addEventListener("load", updateReelsViewport);
     if (window.visualViewport) {
-      window.visualViewport.addEventListener("resize", updateIphoneSafariOffset);
-      window.visualViewport.addEventListener("scroll", updateIphoneSafariOffset);
+      window.visualViewport.addEventListener("resize", updateReelsViewport);
+      window.visualViewport.addEventListener("scroll", updateReelsViewport);
+    }
+
+    if (window.ResizeObserver) {
+      const stickyNav = document.querySelector(".mss-StickyNav");
+      if (stickyNav) {
+        new ResizeObserver(updateReelsViewport).observe(stickyNav);
+      }
     }
   })();
 

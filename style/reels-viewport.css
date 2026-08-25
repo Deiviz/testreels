@@ -1,0 +1,34 @@
+:root {
+  --reels-viewport-height: 100vh;
+  --reels-sticky-nav-height: 62px;
+}
+
+@supports (height: 100dvh) {
+  :root {
+    --reels-viewport-height: 100dvh;
+  }
+}
+
+.tiktok-container,
+.slide {
+  height: var(--reels-viewport-height);
+}
+
+.video-controls-side,
+html.is-iphone .video-controls-side {
+  bottom: max(
+    12%,
+    calc(var(--reels-sticky-nav-height) + 12px + env(safe-area-inset-bottom, 0px))
+  );
+}
+
+html.is-iphone .video-container {
+  height: calc(var(--reels-viewport-height) - var(--reels-sticky-nav-height));
+}
+
+html.is-iphone .jw-text-track-container {
+  bottom: max(
+    15%,
+    calc(var(--reels-sticky-nav-height) + 3rem + env(safe-area-inset-bottom, 0px))
+  ) !important;
+}
