@@ -156,7 +156,8 @@ body,
 
       .tiktok-container {
         width: 100%;
-        height: var(--reels-viewport-height);
+        /* !important evita que el bundle global antiguo vuelva a imponer 100vh. */
+        height: var(--reels-viewport-height) !important;
         overflow-y: scroll;
         scroll-snap-type: y mandatory;
         scroll-behavior: smooth;
@@ -166,7 +167,7 @@ body,
       }
       .slide {
         width: 100%;
-        height: var(--reels-viewport-height);
+        height: var(--reels-viewport-height) !important;
         scroll-snap-align: start;
         scroll-snap-stop: always;
         /* display: flex; */
@@ -220,7 +221,7 @@ body,
       html.is-iphone .video-container {
         top: 0;
         transform: translateX(-50%);
-        height: calc(var(--reels-viewport-height) - var(--reels-sticky-nav-height));
+        height: calc(var(--reels-viewport-height) - var(--reels-sticky-nav-height)) !important;
         overflow: visible;
       }
 
@@ -239,7 +240,7 @@ body,
             var(--reels-sticky-nav-height) + 12px
             + env(safe-area-inset-bottom, 0px)
           )
-        );
+        ) !important;
         /* transform: translateY(-50%); */
         display: flex;
         flex-direction: column;
@@ -375,7 +376,7 @@ body,
       }
 
       /* iPhone: subtítulos por encima del menú y la zona segura inferior */
-      html.is-iphone .jw-text-track-container {
+      html.is-iphone body .jw-text-track-container {
         bottom: max(
           15%,
           calc(
@@ -726,4 +727,3 @@ if (window.visualViewport) {
   </div>
 </body>
 </html>
-
