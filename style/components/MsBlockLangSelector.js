@@ -1,0 +1,1 @@
+window.handleLanguageChange=function(langId){var baseUrl="";fetch("".concat(baseUrl,"/prefs/lang/").concat(langId),{method:"PATCH",headers:{"Content-Type":"application/json"}}).then(function(response){if(response.ok){window.location.reload()}else{console.error("Error al cambiar el idioma")}}).catch(function(error){console.error("Error en la petici\xf3n:",error)})};
